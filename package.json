@@ -1,0 +1,24 @@
+{
+  "name": "d-lint-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./bin/lint-init.js",
+  "bin": {
+    "lint-init": "./bin/lint-init.js",
+    "lint-commit": "./bin/lint-commit.js",
+    "lc": "./bin/lint-commit.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dean",
+  "license": "ISC",
+  "devDependencies": {
+    "execa": "^5.0.0",
+    "inquirer": "^8.0.0",
+    "shelljs": "^0.8.5"
+  }
+}
