@@ -4,7 +4,16 @@
 # 获取当前提交的 commit msg
 commit_msg=`cat "$1"`
 
-if [ ${#commit_msg} -lt 10 ]  
+# --froce 强制提交
+if [[ $commit_msg =~ "--force" ]]
+  then
+    echo -e "\033[33m -- 强制提交 --\033[0m"
+# Merge 生成的commit msg 不进行校验 直接提交
+elif [[ $commit_msg =~ "Merge" ]]
+  then
+    echo -e "\033[33m -- 忽略Merge提交 --\033[0m"
+# 提交内容太短
+elif [ ${#commit_msg} -lt 10 ]  
   then
     echo -e "\033[31m -------------------------------------------------------------------\033[0m"
     echo -e "\033[31m 提交失败! \033[0m"
@@ -13,19 +22,15 @@ if [ ${#commit_msg} -lt 10 ]
     echo -e "\033[31m 提交信息的长度不能小于10, 请完善后再提交 \033[0m"
     echo -e "\033[31m -------------------------------------------------------------------\033[0m"
     exit 1
-fi
-
-
-if [[ $commit_msg =~ "feat:" ]] || 
-   [[ $commit_msg =~ "fix:" ]] ||
-   [[ $commit_msg =~ "style:" ]] ||
-   [[ $commit_msg =~ "refactor:" ]] ||
-   [[ $commit_msg =~ "docs:" ]] ||
-   [[ $commit_msg =~ "test:" ]] ||
-   [[ $commit_msg =~ "chore:" ]]
+# 提交必须包含类型
+elif [[ ! $commit_msg =~ "feat:" ]] && 
+   [[ ! $commit_msg =~ "fix:" ]] &&
+   [[ ! $commit_msg =~ "style:" ]] &&
+   [[ ! $commit_msg =~ "refactor:" ]] &&
+   [[ ! $commit_msg =~ "docs:" ]] &&
+   [[ ! $commit_msg =~ "test:" ]] &&
+   [[ ! $commit_msg =~ "chore:" ]]
 then
-    echo -e ""
-else
     echo -e "\033[31m -------------------------------------------------------------------\033[0m"
     echo -e "\033[31m 提交失败! \033[0m"
     echo -e "\033[31m 提交信息: $commit_msg \033[0m"
@@ -33,13 +38,10 @@ else
     echo -e "\033[32m (√) WEB-1000 feat: 新增xx功能 \033[0m"
     echo -e "\033[31m -------------------------------------------------------------------\033[0m"
     exit 1
-fi
 
 ## 如果不包含'WEB-'则输出提示信息
-if [[ $commit_msg =~ "WEB-" ]]
+elif [[ ! $commit_msg =~ "WEB-" ]]
 then
-    echo -e ""
-else
     echo -e "\033[31m -------------------------------------------------------------------\033[0m"
     echo -e "\033[31m 提交失败! \033[0m"
     echo -e "\033[31m 提交信息: $commit_msg \033[0m"
